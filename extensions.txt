@@ -1,0 +1,8 @@
+ESLint; 
+Fluent Icons; (opcional)
+GitLens; 
+Omni Theme;(opcional)
+PostCSS;
+Prisma;
+Symbols; (opcional)
+Tailwind CSS IntelliSense
