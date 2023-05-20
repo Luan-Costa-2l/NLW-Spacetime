@@ -49,7 +49,7 @@ export async function memorieRoutes(app: FastifyInstance) {
         content,
         coverUrl,
         isPublic,
-        userId: '473e18d6-5c80-4fb7-b122-1cf5917f9eff',
+        userId: '9800d31c-2e17-4b3d-95e5-1727f7ea2c10',
       },
     })
 
