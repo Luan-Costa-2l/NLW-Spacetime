@@ -1,3 +1,5 @@
+'use client'
+import { MidiaPicker } from '@/components/MidiaPicker'
 import { Camera, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 
@@ -36,12 +38,7 @@ export default function NewMemory() {
           </label>
         </div>
 
-        <input
-          type="file"
-          name="midia"
-          id="midia"
-          className="invisible h-0 w-0"
-        />
+        <MidiaPicker />
 
         <textarea
           name="content"
