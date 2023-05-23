@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from 'react-native'
 import Icon from '@expo/vector-icons/Feather'
+import * as ImagePicker from 'expo-image-picker'
 
 import NLWLogo from '../src/assets/nlw-spacetime-logo.svg'
 import { Link } from 'expo-router'
@@ -15,7 +16,29 @@ import { useState } from 'react'
 
 export default function Memories() {
   const { bottom, top } = useSafeAreaInsets()
+
   const [isPublic, setIsPublic] = useState(false)
+  const [preview, setPreview] = useState<string | null>(null)
+  const [content, setContent] = useState('')
+
+  async function openImagePicker() {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+      })
+
+      if (result.assets[0]) {
+        setPreview(result.assets[0].uri)
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  function handleCreateMemory() {
+    console.log(isPublic, content)
+  }
 
   return (
     <ScrollView
@@ -47,6 +70,7 @@ export default function Memories() {
         <TouchableOpacity
           activeOpacity={0.7}
           className="h-32 rounded-lg border border-dashed border-gray-200 bg-black/20"
+          onPress={openImagePicker}
         >
           <View className="flex-1 flex-row items-center justify-center gap-2">
             <Icon name="camera" color="#9e9ea0" />
@@ -61,10 +85,13 @@ export default function Memories() {
           multiline
           placeholderTextColor="#56565a"
           placeholder="Fique livre para adicionar fotos, vídeos e relatos sobre essa experiência que você quer lembrar para sempre."
+          value={content}
+          onChangeText={setContent}
         />
 
         <TouchableOpacity
           activeOpacity={0.7}
+          onPress={handleCreateMemory}
           className="items-center self-end rounded-full bg-green-500 px-5 py-3"
         >
           <Text className="font-alt text-sm uppercase text-black">SALVAR</Text>
