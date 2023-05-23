@@ -9,11 +9,13 @@ import {
 } from 'react-native'
 import Icon from '@expo/vector-icons/Feather'
 import * as ImagePicker from 'expo-image-picker'
+import * as SecureStore from 'expo-secure-store'
 
 import NLWLogo from '../src/assets/nlw-spacetime-logo.svg'
 import { Link } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useState } from 'react'
+import { api } from '../src/lib/api'
 
 export default function Memories() {
   const { bottom, top } = useSafeAreaInsets()
@@ -37,8 +39,30 @@ export default function Memories() {
     }
   }
 
-  function handleCreateMemory() {
-    console.log(isPublic, content)
+  async function handleCreateMemory() {
+    const token = await SecureStore.getItemAsync('token')
+
+    let coverUrl = ''
+
+    if (preview) {
+      const uploadFormData = new FormData()
+
+      uploadFormData.append('file', {
+        uri: preview,
+        name: 'image.jpg',
+        type: 'image/jpeg',
+      } as any)
+
+      const uploadResponse = await api.post('/upload', uploadFormData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      coverUrl = uploadResponse.data.fileUrl
+
+      console.log(coverUrl)
+    }
   }
 
   return (
@@ -92,6 +116,7 @@ export default function Memories() {
         <TextInput
           className="p-0 font-body text-lg text-gray-50"
           multiline
+          textAlignVertical="top"
           placeholderTextColor="#56565a"
           placeholder="Fique livre para adicionar fotos, vídeos e relatos sobre essa experiência que você quer lembrar para sempre."
           value={content}
