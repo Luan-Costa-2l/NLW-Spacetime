@@ -21,7 +21,7 @@ export function MidiaPicker() {
     <>
       <input
         type="file"
-        name="midia"
+        name="coverUrl"
         id="midia"
         accept="image/*"
         className="invisible h-0 w-0"
