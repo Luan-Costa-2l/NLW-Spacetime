@@ -5,6 +5,7 @@ import {
   Switch,
   TextInput,
   ScrollView,
+  Image,
 } from 'react-native'
 import Icon from '@expo/vector-icons/Feather'
 import * as ImagePicker from 'expo-image-picker'
@@ -72,12 +73,20 @@ export default function Memories() {
           className="h-32 rounded-lg border border-dashed border-gray-200 bg-black/20"
           onPress={openImagePicker}
         >
-          <View className="flex-1 flex-row items-center justify-center gap-2">
-            <Icon name="camera" color="#9e9ea0" />
-            <Text className="text-gray-200">
-              Adicionar foto ou vídeo de capa
-            </Text>
-          </View>
+          {preview ? (
+            <Image
+              source={{ uri: preview }}
+              alt=""
+              className="h-full w-full rounded-lg object-cover"
+            />
+          ) : (
+            <View className="flex-1 flex-row items-center justify-center gap-2">
+              <Icon name="camera" color="#9e9ea0" />
+              <Text className="text-gray-200">
+                Adicionar foto ou vídeo de capa
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
 
         <TextInput
