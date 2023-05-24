@@ -12,13 +12,14 @@ import * as ImagePicker from 'expo-image-picker'
 import * as SecureStore from 'expo-secure-store'
 
 import NLWLogo from '../src/assets/nlw-spacetime-logo.svg'
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useState } from 'react'
 import { api } from '../src/lib/api'
 
 export default function Memories() {
   const { bottom, top } = useSafeAreaInsets()
+  const router = useRouter()
 
   const [isPublic, setIsPublic] = useState(false)
   const [preview, setPreview] = useState<string | null>(null)
@@ -55,14 +56,28 @@ export default function Memories() {
 
       const uploadResponse = await api.post('/upload', uploadFormData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
       })
 
       coverUrl = uploadResponse.data.fileUrl
-
-      console.log(coverUrl)
     }
+
+    await api.post(
+      '/memories',
+      {
+        content,
+        isPublic,
+        coverUrl,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+
+    router.push('/memories')
   }
 
   return (
