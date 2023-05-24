@@ -4,15 +4,41 @@ import NLWLogo from '../src/assets/nlw-spacetime-logo.svg'
 import { Link, useRouter } from 'expo-router'
 import Icon from '@expo/vector-icons/Feather'
 import * as SecureStore from 'expo-secure-store'
+import { useEffect, useState } from 'react'
+import { api } from '../src/lib/api'
+
+
+interface MemoriesType {
+  coverUrl: string
+  excerpt: string
+  createdAt: string
+  id: string
+}
 
 export default function Memories() {
   const { bottom, top } = useSafeAreaInsets()
   const router = useRouter()
 
+  const [memories, setMemories] = useState<MemoriesType[]>([])
+
+  async function loadMemories() {
+    const token = await SecureStore.getItemAsync('token')
+    const response = await api.get('/memories', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    setMemories(response.data)
+  }
+
   async function signOut() {
     await SecureStore.deleteItemAsync('token')
     router.push('/')
   }
+
+  useEffect(() => {
+    loadMemories()
+  }, [])
 
   return (
     <ScrollView
